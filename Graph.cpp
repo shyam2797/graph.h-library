@@ -20,6 +20,9 @@ int main()
         case 2:
             DFSTraversal(G);
             break;
+        case 3:
+            BFSTraversal(G);
+            break;
         default:
             cout<<"Not a valid choice";
         }

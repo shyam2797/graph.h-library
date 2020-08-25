@@ -1,3 +1,4 @@
+#include<queue>
 struct Graph
 {
     int V,E;
@@ -42,17 +43,17 @@ struct Graph * adjGraph()
     return G;
 
 }
-void DFS(struct Graph * G ,int start ,int arr[])
+void DFS(struct Graph * G,int start,int arr[])
 {
-std::cout<<start<<" ";
-arr[start]=1;
-for(int v=0;v<G->V;v++)
-{
-if(!arr[v] && G->adj[start][v])
-{
-DFS(G,v,arr);
-}
-}
+    std::cout<<start<<" ";
+    arr[start]=1;
+    for(int v=0; v<G->V; v++)
+    {
+        if(!arr[v] && G->adj[start][v])
+        {
+            DFS(G,v,arr);
+        }
+    }
 }
 void DFSTraversal(struct Graph * G)
 {
@@ -66,6 +67,40 @@ void DFSTraversal(struct Graph * G)
     }
     std::cout<<std::endl;
 }
+void BFS(Graph * G,int start,int arr[])
+{
+    int u;
+    std::queue<int>Q;
+    Q.push(start);
+    while(!Q.empty())
+    {
+        u=Q.front();
+        std::cout<<u<<" ";
+        arr[u]=1;
+        Q.pop();
+        for(int v=0; v<G->V; v++)
+        {
+            if(!arr[v] && G->adj[u][v])
+            {
+                Q.push(v);
+            }
+        }
 
+    }
 
+}
+
+void BFSTraversal(struct Graph * G)
+{
+    int visited[G->V];
+    for(int i=0; i<G->V; i++)
+        visited[i]=0;
+    for(int i=0; i<G->V; i++)
+    {
+        if(!visited[i])
+            BFS(G,i,visited);
+    }
+    std::cout<<std::endl;
+
+}
 
