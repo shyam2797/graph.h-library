@@ -42,6 +42,30 @@ struct Graph * adjGraph()
     return G;
 
 }
+void DFS(struct Graph * G ,int start ,int arr[])
+{
+std::cout<<start<<" ";
+arr[start]=1;
+for(int v=0;v<G->V;v++)
+{
+if(!arr[v] && G->adj[start][v])
+{
+DFS(G,v,arr);
+}
+}
+}
+void DFSTraversal(struct Graph * G)
+{
+    int visited[G->V];
+    for(int i=0; i<G->V; i++)
+        visited[i]=0;
+    for(int i=0; i<G->V; i++)
+    {
+        if(!visited[i])
+            DFS(G,i,visited);
+    }
+    std::cout<<std::endl;
+}
 
 
 

@@ -17,6 +17,9 @@ int main()
         case 1:
             print(G);
             break;
+        case 2:
+            DFSTraversal(G);
+            break;
         default:
             cout<<"Not a valid choice";
         }
