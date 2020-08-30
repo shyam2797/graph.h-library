@@ -33,28 +33,57 @@ struct Graph * adjGraph()
             G->adj[u][v]=0;
         }
     }
-    int ch;
+    int wh;
     std::cout<<"Is this a weighted graph,if yes then press 1 else 0"<<std::endl;
-    std::cin>>ch;
-    if(ch==0)
+    std::cin>>wh;
+    if(wh==0)
     {
-        std::cout<<"Enter All the edges of the Graph:"<<std::endl;
-        for(int i=0; i<G->E; i++)
+        int dh,w;
+        std::cout<<"Enter 1 if graph is directed else 0:"<<std::endl;
+        std::cin>>dh;
+        if(dh==0)
         {
-            std::cin>>u>>v;
-            G->adj[u][v]=1;
-            G->adj[v][u]=1;
+            std::cout<<"Enter All the edges of the Graph and weight:"<<std::endl;
+            for(int i=0; i<G->E; i++)
+            {
+                std::cin>>u>>v;
+                G->adj[u][v]=w;
+                G->adj[v][u]=w;
+            }
+        }
+        else
+        {
+            std::cout<<"Enter All the edges of the Graph and weight:"<<std::endl;
+            for(int i=0; i<G->E; i++)
+            {
+                std::cin>>u>>v;
+                G->adj[u][v]=w;
+            }
         }
     }
     else
     {
-        int w;
-        std::cout<<"Enter All the edges of the Graph and weight:"<<std::endl;
-        for(int i=0; i<G->E; i++)
+        int dh;
+        std::cout<<"Enter 1 if graph is directed else 0:"<<std::endl;
+        std::cin>>dh;
+        if(dh==0)
         {
-            std::cin>>u>>v>>w;
-            G->adj[u][v]=w;
-            G->adj[v][u]=w;
+            std::cout<<"Enter All the edges of the Graph:"<<std::endl;
+            for(int i=0; i<G->E; i++)
+            {
+                std::cin>>u>>v;
+                G->adj[u][v]=1;
+                G->adj[v][u]=1;
+            }
+        }
+        else
+        {
+            std::cout<<"Enter All the edges of the Graph:"<<std::endl;
+            for(int i=0; i<G->E; i++)
+            {
+                std::cin>>u>>v;
+                G->adj[u][v]=1;
+            }
         }
     }
     return G;
@@ -161,6 +190,58 @@ void AllPairShortestPath(Graph * G)
         std::cout<<std::endl;
     }
 
+}
+void TopologicalSort(Graph * G)
+{
+    int indegree[G->V],TO[G->V];
+    for(int i=0; i<G->V; i++)
+        indegree[i]=0;
+    for(int i=0; i<G->V; i++)
+    {
+        for(int j=0; j<G->V; j++)
+        {
+            if(G->adj[i][j])
+            {
+                indegree[j]++;
+            }
+        }
+    }
+    int counter=0;
+    std::queue<int>Q;
+    for(int i=0; i<G->V; i++)
+    {
+        if(indegree[i]==0)
+        {
+            Q.push(i);
+        }
+    }
+    while(!Q.empty())
+    {
+        int v=Q.front();
+        Q.pop();
+        TO[v]=counter++;
+        for(int i=0; i<G->V; i++)
+        {
+            if(i!=v && G->adj[v][i]!=0)
+            {
+                indegree[i]--;
+                if(indegree[i]==0)
+                    Q.push(i);
+            }
+        }
+
+    }
+    if(counter!=G->V)
+    {
+        std::cout<<"There is a cycle in the graph!"<<std::endl;
+    }
+    else
+    {
+        for(int i=0; i<G->V; i++)
+        {
+            std::cout<<i<<"------>"<<TO[i]<<std::endl;
+        }
+    }
 }
 /*
 0 1 5

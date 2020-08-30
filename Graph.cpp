@@ -11,6 +11,7 @@ int main()
     cout<<"Enter 2 for Depth First Traversal"<<endl;
     cout<<"Enter 3 for Breadth First Traversal"<<endl;
     cout<<"Enter 4 for All Pair Shortest Path"<<endl;
+    cout<<"Enter 5 for Topological Sort"<<endl;
     while(1)
     {
         int choice;
@@ -28,6 +29,9 @@ int main()
             break;
         case 4:
             AllPairShortestPath(G);
+            break;
+        case 5:
+            TopologicalSort(G);
             break;
         default:
             cout<<"Not a valid choice";
