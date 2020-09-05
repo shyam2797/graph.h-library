@@ -1,4 +1,5 @@
 #include<queue>
+using namespace std;
 struct Graph
 {
     int V,E;
@@ -36,7 +37,7 @@ struct Graph * adjGraph()
     int wh;
     std::cout<<"Is this a weighted graph,if yes then press 1 else 0"<<std::endl;
     std::cin>>wh;
-    if(wh==0)
+    if(wh==1)
     {
         int dh,w;
         std::cout<<"Enter 1 if graph is directed else 0:"<<std::endl;
@@ -46,7 +47,7 @@ struct Graph * adjGraph()
             std::cout<<"Enter All the edges of the Graph and weight:"<<std::endl;
             for(int i=0; i<G->E; i++)
             {
-                std::cin>>u>>v;
+                std::cin>>u>>v>>w;
                 G->adj[u][v]=w;
                 G->adj[v][u]=w;
             }
@@ -56,7 +57,7 @@ struct Graph * adjGraph()
             std::cout<<"Enter All the edges of the Graph and weight:"<<std::endl;
             for(int i=0; i<G->E; i++)
             {
-                std::cin>>u>>v;
+                std::cin>>u>>v>>w;
                 G->adj[u][v]=w;
             }
         }
@@ -243,13 +244,134 @@ void TopologicalSort(Graph * G)
         }
     }
 }
-/*
-0 1 5
-0 2 3
-1 3 2
-2 3 4
-1 4 6
-3 4 3
-*/
+void ShortestPath(Graph * G,int source)
+{
+    int u,v,w;
+    queue<int>Q;
+    int distance[G->V],path[G->V];
+    for(int i=0; i<G->V; i++)
+    {
+        distance[i]=-1;
+        path[i]=-1;
+    }
+    distance[source]=0;
+    Q.push(source);
+    while(!Q.empty())
+    {
+        v=Q.front();
+        Q.pop();
+        for(w=0; w<G->V; w++)
+        {
+            if(G->adj[v][w] && distance[w]==-1)
+            {
+                distance[w]=distance[v]+1;
+                path[w]=v;
+                Q.push(w);
+            }
+        }
 
+    }
+    for(int i=0; i<G->V; i++)
+    {
+        cout<<"Path "<<path[i]<<" Distance "<<distance[i]<<endl;
+    }
+    return;
 
+}
+void ShortestPathDijkstra(Graph * G,int source)
+{
+    typedef pair<int, int> pd;
+
+// Structure of the operator
+// overloading for comparison
+    struct myComp
+    {
+        constexpr bool operator()(
+            pair<int, int> const& a,
+            pair<int, int> const& b)
+        const noexcept
+        {
+            return a.second > b.second;
+        }
+    };
+    int u,v,w;
+    priority_queue< pd,vector<pd>,myComp >Q;
+    int distance[G->V],path[G->V],visited[G->V];
+    for(int i=0; i<G->V; i++)
+    {
+        distance[i]=-1;
+        path[i]=-1;
+        visited[i]=0;
+    }
+    distance[source]=0;
+    Q.push(make_pair(source,distance[source]));
+    while(!Q.empty())
+    {
+        int v=Q.top().first;
+        int d=Q.top().second;
+        Q.pop();
+        if(visited[v]!=1)
+        {
+            visited[v]=1;
+            distance[v]=d;
+            //cout<<"v "<<v<<" p "<<path[v]<<" d "<<distance[v]<<endl;
+            for(w=0; w<G->V; w++)
+            {
+                if(G->adj[v][w] && distance[w]==-1)
+                {
+
+                    distance[w]=distance[v]+G->adj[v][w];
+                    path[w]=v;
+                    Q.push(make_pair(w,distance[w]));
+                    // cout<<"v "<<v<<"w "<<w<<"p "<<path[w]<<"d "<<distance[w]<<endl;
+                }
+                else if(G->adj[v][w] && visited[w]!=1 && (distance[w] > distance[v]+G->adj[v][w]) )
+                {
+                    distance[w]=distance[v]+G->adj[v][w];
+                    path[w]=v;
+                    Q.push(make_pair(w,distance[w]));
+                    //cout<<"v "<<v<<"w "<<w<<"p "<<path[w]<<"d "<<distance[w]<<endl;
+                }
+            }
+        }
+
+    }
+    for(int i=0; i<G->V; i++)
+    {
+        cout<<"Path "<<path[i]<<" Distance "<<distance[i]<<endl;
+    }
+    return;
+}
+void ShortestPathBellmanFort(Graph * G,int source)
+{
+    int u,v,w;
+    queue<int>Q;
+    int distance[G->V],path[G->V];
+    for(int i=0; i<G->V; i++)
+    {
+        distance[i]=1000;
+        path[i]=-1;
+    }
+    distance[source]=0;
+    Q.push(source);
+    while(!Q.empty())
+    {
+        v=Q.front();
+        Q.pop();
+        for(w=0; w<G->V; w++)
+        {
+            if(G->adj[v][w] && distance[w] > distance[v]+G->adj[v][w])
+            {
+                distance[w]=distance[v]+G->adj[v][w];
+                path[w]=v;
+                Q.push(w);
+            }
+        }
+
+    }
+    for(int i=0; i<G->V; i++)
+    {
+        cout<<"Path "<<path[i]<<" Distance "<<distance[i]<<endl;
+    }
+    return;
+}
